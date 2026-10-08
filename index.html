@@ -1,0 +1,1161 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4eedf">
+<title>Etna Enigmistica Play V46 · Supabase</title>
+<style>
+:root{
+  --paper:#f4eedf;
+  --paper2:#fffaf0;
+  --ink:#111;
+  --muted:#6b655c;
+  --red:#b3261e;
+  --blue:#163f78;
+  --gold:#c49b43;
+  --green:#2f7d4a;
+  --bad:#b3261e;
+  --line:#1e1e1e;
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  min-height:100%;
+  background:#d8d2c6;
+  color:var(--ink);
+  font-family:Georgia,"Times New Roman",serif;
+}
+button,input{font:inherit}
+button{
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+#app{
+  width:100%;
+  max-width:520px;
+  margin:auto;
+  min-height:100vh;
+  background:
+    linear-gradient(rgba(255,255,255,.52),rgba(255,255,255,.52)),
+    repeating-linear-gradient(0deg,rgba(0,0,0,.015) 0 1px,transparent 1px 4px),
+    var(--paper);
+  box-shadow:0 0 40px rgba(0,0,0,.2);
+}
+.screen{display:none}
+.screen.on{display:block}
+
+/* COVER */
+.cover{
+  padding:12px;
+  min-height:100vh;
+  display:none;
+}
+.cover.on{
+  display:grid;
+  align-content:space-between;
+}
+.masthead{
+  border-top:7px solid var(--red);
+  border-bottom:2px solid var(--ink);
+  padding:8px 2px 7px;
+  text-align:center;
+}
+.masthead small{
+  display:block;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.16em;
+  color:var(--blue);
+}
+.masthead h1{
+  margin:4px 0 0;
+  font-size:clamp(31px,9vw,46px);
+  line-height:.9;
+  letter-spacing:-.045em;
+  text-transform:uppercase;
+}
+.masthead h1 span{color:var(--red)}
+.issue{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  font-size:8px;
+  font-weight:900;
+  padding:5px 0;
+  border-bottom:1px solid #777;
+}
+.cover-body{
+  position:relative;
+  padding:14px 6px 8px;
+  text-align:center;
+}
+.cover-kicker{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  color:var(--red);
+  font-size:10px;
+  font-weight:1000;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.cover-body h2{
+  margin:6px 0 6px;
+  font-size:29px;
+  line-height:.95;
+  text-transform:uppercase;
+}
+.cover-body p{
+  max-width:390px;
+  margin:0 auto;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.4;
+}
+.cover-art{
+  width:min(92vw,410px);
+  margin:12px auto 8px;
+  position:relative;
+}
+.fake-grid{
+  display:grid;
+  grid-template-columns:repeat(9,1fr);
+  gap:2px;
+  transform:rotate(-2deg);
+  background:#111;
+  border:2px solid #111;
+}
+.fake-grid i{
+  display:block;
+  aspect-ratio:1;
+  background:#fffaf0;
+}
+.fake-grid i:nth-child(4n),
+.fake-grid i:nth-child(7n){background:#111}
+.fake-grid i.hot{
+  background:#f4d36a;
+  animation:blinkCell 1.8s ease-in-out infinite;
+}
+@keyframes blinkCell{50%{background:#f8b64b}}
+.volcano{
+  width:0;height:0;
+  border-left:64px solid transparent;
+  border-right:64px solid transparent;
+  border-bottom:100px solid #262626;
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-28%);
+  filter:drop-shadow(0 8px 8px rgba(0,0,0,.18));
+}
+.volcano:after{
+  content:"";
+  position:absolute;
+  width:8px;height:58px;
+  left:-4px;top:41px;
+  background:linear-gradient(#ffd24b,#e85122,#b3261e);
+  border-radius:999px;
+  transform:rotate(5deg);
+  box-shadow:0 0 8px rgba(179,38,30,.5);
+  animation:lava 1.6s ease-in-out infinite;
+}
+@keyframes lava{50%{height:70px;filter:brightness(1.2)}}
+.cover-actions{
+  display:grid;
+  gap:7px;
+}
+.toggles{
+  display:flex;
+  justify-content:center;
+  gap:6px;
+}
+.toggle{
+  min-height:40px;
+  border:1px solid #555;
+  background:var(--paper2);
+  color:var(--ink);
+  padding:0 12px;
+  border-radius:3px;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  font-size:9px;
+  font-weight:900;
+}
+.toggle.on{
+  border-color:var(--red);
+  box-shadow:inset 0 -3px var(--red);
+}
+.start{
+  min-height:50px;
+  border:0;
+  background:var(--red);
+  color:white;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  font-size:12px;
+  font-weight:1000;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  border-radius:3px;
+}
+.cover-note{
+  text-align:center;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  color:#777;
+  font-size:8px;
+}
+
+/* GAME - COMPACT MOBILE */
+.game{
+  padding:7px 8px 12px;
+}
+.game-header{
+  border-top:6px solid var(--red);
+  border-bottom:2px solid var(--ink);
+  padding:5px 0 4px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:end;
+  gap:8px;
+}
+.game-title small{
+  display:block;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  font-size:7px;
+  color:var(--blue);
+  font-weight:900;
+  letter-spacing:.12em;
+}
+.game-title b{
+  font-size:21px;
+  line-height:1;
+  text-transform:uppercase;
+}
+.game-title b span{color:var(--red)}
+.icons{display:flex;gap:4px}
+.icon{
+  width:36px;height:36px;
+  border:1px solid #777;
+  background:var(--paper2);
+  border-radius:3px;
+}
+.icon.on{box-shadow:inset 0 -3px var(--red)}
+
+.meta{
+  display:grid;
+  grid-template-columns:1.3fr .7fr .7fr;
+  gap:4px;
+  margin-top:5px;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+}
+.meta div{
+  min-height:30px;
+  padding:5px 7px;
+  border:1px solid #888;
+  background:rgba(255,255,255,.48);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-size:8px;
+  font-weight:900;
+}
+.meta .theme{
+  justify-content:flex-start;
+  color:var(--blue);
+  font-size:9px;
+}
+.progress{
+  height:5px;
+  background:#d5ccba;
+  margin:4px 0 5px;
+  overflow:hidden;
+}
+.progress i{
+  display:block;
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,var(--blue),var(--red));
+  transition:.2s;
+}
+
+/* clue */
+.cluebox{
+  border:2px solid var(--ink);
+  background:var(--paper2);
+  padding:7px 8px 6px;
+}
+.clue-row{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:7px;
+  align-items:start;
+}
+.clue-no{
+  min-width:43px;
+  background:var(--ink);
+  color:white;
+  padding:5px 4px;
+  text-align:center;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  font-size:8px;
+  font-weight:1000;
+}
+.clue-text{
+  font-size:14px;
+  line-height:1.15;
+  font-weight:700;
+}
+.clue-tools{
+  display:flex;
+  gap:4px;
+  margin-top:6px;
+}
+.smallbtn{
+  min-height:34px;
+  flex:1;
+  border:1px solid #777;
+  background:#efe6d6;
+  color:#222;
+  border-radius:2px;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  font-size:8px;
+  font-weight:900;
+}
+.smallbtn.active{
+  background:#e4d1a3;
+  border-color:#6e5423;
+}
+
+/* compact input */
+.inputbar{
+  display:grid;
+  grid-template-columns:1fr 42px;
+  gap:4px;
+  margin:5px 0;
+}
+#native{
+  min-height:42px;
+  border:1.5px solid #222;
+  background:#fff;
+  color:#111;
+  outline:none;
+  padding:0 10px;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  font-size:16px;
+  font-weight:900;
+  text-transform:uppercase;
+}
+#native:focus{
+  border-color:var(--blue);
+  box-shadow:0 0 0 2px rgba(22,63,120,.12);
+}
+.keybtn{
+  border:1.5px solid #222;
+  background:#eee4d3;
+  font-size:16px;
+}
+
+/* GRID */
+.board{
+  border:2px solid #111;
+  background:#111;
+  padding:2px;
+}
+#grid{
+  display:grid;
+  gap:1px;
+  width:100%;
+  aspect-ratio:10/11;
+}
+.blk{
+  background:#111;
+}
+.cell{
+  position:relative;
+  overflow:hidden;
+  border:0;
+  background:#fff;
+  padding:0;
+  color:#111;
+}
+.cell.word{background:#f7e8b8}
+.cell.sel{
+  background:#f3cc55;
+  box-shadow:inset 0 0 0 2px var(--red);
+}
+.cell.ok{background:#d8eddc}
+.cell.bad{background:#f3b7b4}
+.cell.win{animation:win .45s ease}
+@keyframes win{50%{transform:scale(.93);background:#a8dbb5}}
+.num{
+  position:absolute;
+  top:1px;left:2px;
+  font-family:Arial,sans-serif;
+  font-size:5px;
+  font-weight:900;
+}
+.letter{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  font-family:Arial,sans-serif;
+  font-size:clamp(12px,4vw,19px);
+  font-weight:900;
+}
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr 1.15fr;
+  gap:4px;
+  margin-top:5px;
+}
+.action{
+  min-height:39px;
+  border:1px solid #555;
+  background:#eee5d4;
+  color:#111;
+  border-radius:2px;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  font-size:8px;
+  font-weight:1000;
+  text-transform:uppercase;
+}
+.action.hint{background:#f0d77a}
+.action.check{background:var(--red);color:white;border-color:var(--red)}
+#notice{
+  min-height:20px;
+  padding:4px 2px 0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  font-size:9px;
+  font-weight:900;
+}
+#notice.good{color:var(--green)}
+#notice.bad{color:var(--bad)}
+
+details{
+  margin-top:4px;
+  border-top:1px solid #777;
+}
+summary{
+  list-style:none;
+  min-height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  font-size:8px;
+  font-weight:1000;
+  color:var(--blue);
+  cursor:pointer;
+}
+summary::-webkit-details-marker{display:none}
+.defs{
+  display:grid;
+  gap:3px;
+  padding-bottom:6px;
+}
+.def{
+  min-height:34px;
+  border:1px solid #aaa;
+  background:rgba(255,255,255,.5);
+  text-align:left;
+  padding:6px 7px;
+  font-size:10px;
+}
+.def b{color:var(--red)}
+.def.active{border-left:4px solid var(--red);background:#fff7e7}
+.footer{
+  padding:5px 0 0;
+  text-align:center;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  font-size:7px;
+  color:#777;
+}
+
+/* LEVEL DIALOG */
+dialog{
+  width:min(92%,430px);
+  border:2px solid #111;
+  background:var(--paper);
+  color:#111;
+  padding:0;
+  box-shadow:0 20px 60px rgba(0,0,0,.45);
+}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+.dialog-head{
+  border-top:7px solid var(--red);
+  border-bottom:2px solid #111;
+  padding:10px;
+  text-align:center;
+}
+.dialog-head small{
+  display:block;
+  color:var(--blue);
+  font-family:Arial,sans-serif;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+.dialog-head h2{
+  margin:3px 0 0;
+  font-size:27px;
+}
+.dialog-body{padding:12px}
+.dialog-stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:4px;
+  margin:10px 0;
+}
+.dialog-stats div{
+  border:1px solid #888;
+  padding:8px 4px;
+  text-align:center;
+  font-family:Arial,sans-serif;
+}
+.dialog-stats small{display:block;font-size:7px;color:#777}
+.dialog-stats b{font-size:17px}
+.dialog-actions{
+  display:grid;
+  grid-template-columns:1fr 1.2fr;
+  gap:5px;
+}
+.dialog-actions button{
+  min-height:44px;
+  border:1px solid #555;
+  background:#eee4d3;
+  font-family:Arial,sans-serif;
+  font-size:9px;
+  font-weight:1000;
+}
+.dialog-actions .next{
+  background:var(--red);
+  color:white;
+  border-color:var(--red);
+}
+@media(min-width:700px){
+  #app{margin:20px auto;min-height:auto}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+
+/* V46 · Cloud status: small and unobtrusive on iPhone */
+#cloudStatus{display:flex;justify-content:center;align-items:center;min-height:18px;
+  color:#245c78;font:800 8px -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  letter-spacing:.04em;margin:0 0 4px;white-space:normal;text-align:center}
+#cloudStatus.offline{color:#8f5d26}
+#start[disabled]{opacity:.68;cursor:wait}
+
+</style>
+</head>
+<body>
+<div id="app">
+
+<section class="screen cover on" data-screen="cover">
+  <div>
+    <div class="masthead">
+      <small>ETNA SPIRITS · SEBYLAB</small>
+      <h1>ETNA <span>ENIGMISTICA</span></h1>
+    </div>
+    <div class="issue">
+      <span>EDIZIONE MOBILE</span>
+      <span>5 LIVELLI</span>
+      <span>V46 · CLOUD</span>
+    </div>
+  </div>
+
+  <div class="cover-body">
+    <div class="cover-kicker">Il cruciverba siciliano</div>
+    <h2>Classico fuori.<br>Vivo dentro.</h2>
+    <p>Più vicino alla logica di una rivista enigmistica: carta avorio, griglia bianco/nero, numerazione pulita. Ma con livelli, XP, audio e indizi variabili.</p>
+
+    <div class="cover-art" aria-hidden="true">
+      <div class="fake-grid">
+        <i></i><i></i><i class="hot"></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i><i class="hot"></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i><i></i><i></i><i class="hot"></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        <i></i><i class="hot"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <div class="volcano"></div>
+    </div>
+  </div>
+
+  <div class="cover-actions">
+    <div class="toggles">
+      <button class="toggle on" id="coverSound" type="button">🔊 AUDIO</button>
+      <button class="toggle on" id="coverHaptic" type="button">📳 HAPTIC</button>
+    </div>
+    <button class="start" id="start" type="button">INIZIA IL CRUCIVERBA →</button>
+    <div class="cover-note">5 livelli online · progressi salvati sul telefono</div>
+  </div>
+</section>
+
+<section class="screen game" data-screen="game">
+  <div class="game-header">
+    <div class="game-title">
+      <small>ETNA SPIRITS · SEBYLAB</small>
+      <b>ETNA <span>ENIGMISTICA</span></b>
+    </div>
+    <div class="icons">
+      <button class="icon on" id="sound" type="button">🔊</button>
+      <button class="icon on" id="haptic" type="button">📳</button>
+    </div>
+  </div>
+
+  <div class="meta">
+    <div class="theme" id="theme">🌋 ETNA</div>
+    <div id="level">LIV. 1/5</div>
+    <div id="xp">XP 0</div>
+  </div>
+  <div class="progress"><i id="progress"></i></div>
+  <div id="cloudStatus" role="status" aria-live="polite">CONNESSIONE DATI…</div>
+
+  <div class="cluebox">
+    <div class="clue-row">
+      <div class="clue-no" id="clueNo">1 OR.</div>
+      <div class="clue-text" id="clueText"></div>
+    </div>
+    <div class="clue-tools">
+      <button class="smallbtn active" id="dirH" type="button">↔ ORIZZONTALE</button>
+      <button class="smallbtn" id="dirV" type="button">↕ VERTICALE</button>
+      <button class="smallbtn" id="shuffle" type="button">🎲 INDIZIO</button>
+    </div>
+  </div>
+
+  <div class="inputbar">
+    <input id="native" type="text" inputmode="text" enterkeyhint="next" autocapitalize="characters" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="SCRIVI…">
+    <button class="keybtn" id="back" type="button">⌫</button>
+  </div>
+
+  <div class="board">
+    <div id="grid"></div>
+  </div>
+
+  <div class="actions">
+    <button class="action" id="keyboard" type="button">⌨ TASTIERA</button>
+    <button class="action hint" id="hint" type="button">💡 AIUTO</button>
+    <button class="action check" id="check" type="button">✓ VERIFICA</button>
+  </div>
+
+  <div id="notice" aria-live="polite"></div>
+
+  <details>
+    <summary>▾ DEFINIZIONI DEL LIVELLO</summary>
+    <div class="defs" id="defs"></div>
+  </details>
+
+  <div class="footer">ETNA SPIRITS — UN PROGETTO DI SEBYLAB</div>
+</section>
+
+<dialog id="levelDialog">
+  <div class="dialog-head">
+    <small>ETNA ENIGMISTICA</small>
+    <h2 id="dialogTitle">Livello completato</h2>
+  </div>
+  <div class="dialog-body">
+    <p id="dialogText"></p>
+    <div class="dialog-stats">
+      <div><small>XP</small><b id="dXp">0</b></div>
+      <div><small>PAROLE</small><b id="dWords">0</b></div>
+      <div><small>STREAK</small><b id="dStreak">0</b></div>
+    </div>
+    <div class="dialog-actions">
+      <button id="closeDialog" type="button">CHIUDI</button>
+      <button class="next" id="next" type="button">LIVELLO SUCCESSIVO →</button>
+    </div>
+  </div>
+</dialog>
+
+</div>
+
+<script>
+(()=>{
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const screens=$$("[data-screen]"), grid=$("#grid"), native=$("#native"), defs=$("#defs"), notice=$("#notice");
+
+function show(name){
+  screens.forEach(s=>s.classList.toggle("on",s.dataset.screen===name));
+  scrollTo(0,0);
+}
+
+/* Audio */
+let soundOn=true,hapticOn=true,audio=null;
+function ac(){
+  const C=window.AudioContext||window.webkitAudioContext;
+  if(!C)return null;
+  if(!audio)audio=new C();
+  if(audio.state==="suspended")audio.resume();
+  return audio;
+}
+function tone(f=520,d=.025,v=.004,type="sine"){
+  if(!soundOn)return;
+  const c=ac(); if(!c)return;
+  const o=c.createOscillator(),g=c.createGain();
+  o.type=type;o.frequency.value=f;
+  g.gain.setValueAtTime(v,c.currentTime);
+  g.gain.exponentialRampToValueAtTime(.001,c.currentTime+d);
+  o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+d);
+}
+function typeTone(){tone(760,.014,.0025)}
+function tapTone(){tone(620,.018,.003)}
+function winTone(){
+  if(!soundOn)return;
+  [659,784,988].forEach((f,i)=>setTimeout(()=>tone(f,.14,.011),i*58));
+}
+function errorTone(){
+  tone(145,.11,.016,"triangle");
+  setTimeout(()=>tone(112,.12,.012,"triangle"),75);
+}
+function haptic(kind="tap",el=null){
+  let ok=false;
+  if(hapticOn&&"vibrate"in navigator){
+    try{ok=navigator.vibrate(kind==="ok"?[15,20,30]:kind==="bad"?[25,18,25]:5)}catch(e){}
+  }
+  if(hapticOn&&!ok&&el){
+    el.animate([{transform:"scale(1)"},{transform:"scale(.95)"},{transform:"scale(1)"}],{duration:120});
+  }
+}
+function syncToggles(){
+  $("#sound").textContent=soundOn?"🔊":"🔇";
+  $("#coverSound").textContent=soundOn?"🔊 AUDIO":"🔇 AUDIO";
+  $("#sound").classList.toggle("on",soundOn);
+  $("#coverSound").classList.toggle("on",soundOn);
+  $("#haptic").classList.toggle("on",hapticOn);
+  $("#coverHaptic").classList.toggle("on",hapticOn);
+}
+$("#sound").onclick=$("#coverSound").onclick=()=>{ac();soundOn=!soundOn;syncToggles();if(soundOn)winTone()};
+$("#haptic").onclick=$("#coverHaptic").onclick=()=>{hapticOn=!hapticOn;syncToggles();haptic("tap",$("#app"))};
+
+/* clue banks */
+const CLUES={
+ETNA:["Il vulcano simbolo della Sicilia orientale.","A Muntagna per eccellenza nel Catanese.","Bianco d'inverno, di fuoco quando si sveglia."],
+NORMA:["Pasta catanese con melanzane e ricotta salata.","Un primo catanese che porta un nome da donna.","Secondo tradizione richiama l'opera di Bellini."],
+PUPI:["Cavalieri del teatro tradizionale siciliano.","Orlando e Rinaldo appartengono a questa tradizione.","Eroi mossi dai pupari."],
+ACI:["Tre lettere presenti in molti nomi dell'area acese.","Uniscono Castello, Trezza e Catena.","Piccolo nome, grande famiglia di paesi."],
+MARE:["Abbraccia la Sicilia da ogni lato.","Blu e salato, protagonista delle coste.","È sempre vicino quando vivi su un'isola."],
+SICILIA:["L'isola più grande del Mediterraneo.","Terra di Etna, agrumi e barocco.","Ha tre punte e il simbolo della Trinacria."],
+CANNOLI:["Cialda croccante e ricotta.","Tra i dolci siciliani più famosi.","Uno tira l'altro, soprattutto col pistacchio."],
+LIOTRU:["Il nome popolare dell'elefante di Catania.","U Liotru: simbolo della città etnea.","Animale di pietra lavica in Piazza Duomo."],
+LAVA:["Scorre incandescente quando il vulcano erutta.","La firma di fuoco dell'Etna.","Roccia fusa che diventa nera raffreddandosi."],
+TIMPA:["Costa naturale a terrazze di Acireale.","Parete verde e lavica affacciata sullo Ionio.","Riserva naturale verticale tra Acireale e il mare."],
+CATANIA:["Città dell'elefante e dell'Etna.","La città nera di lava e bianca di barocco.","Capoluogo ai piedi del vulcano."],
+CUPOLE:["Coronano molte chiese barocche.","Elementi architettonici visibili nello skyline sacro.","Semisfere monumentali sopra molte chiese."],
+PLAYA:["La lunga spiaggia sabbiosa di Catania.","Il litorale sabbioso a sud della città.","Dove Catania incontra sabbia e mare."],
+ETNEA:["La via catanese che guarda il vulcano.","Grande asse urbano del centro.","Strada dello shopping che attraversa Catania."],
+AGATA:["La patrona di Catania.","La santa celebrata a febbraio.","Nome legato alla devozione catanese."],
+NESIMA:["Quartiere catanese servito dalla metropolitana.","Zona occidentale della città.","Nome di quartiere e fermata metro."],
+CAPONATA:["Melanzane in agrodolce.","Piatto siciliano dove l'agrodolce fa sul serio.","Ricetta con melanzane, sedano e aceto."],
+CANNOLO:["Singolare del dolce con ricotta.","Un tubo dolce ripieno di ricotta.","Il re croccante della pasticceria siciliana."],
+PASTA:["Base di mille primi piatti siciliani.","Con Norma o sarde diventa molto siciliana.","Spaghetti e rigatoni ne fanno parte."],
+OLIVA:["Frutto da cui nasce l'olio.","Può essere verde o nera.","Il frutto dell'ulivo."],
+AGRUMI:["Arance, limoni e mandarini insieme.","Famiglia profumata molto legata alla Sicilia.","Limone e arancia ne fanno parte."],
+TAVOLA:["Si apparecchia prima di mangiare.","Riunisce famiglia e amici.","Può essere imbandita nelle feste."],
+ARANCINO:["A Catania è maschio e spesso a punta.","Street food di riso molto discusso.","Riso, ragù e frittura: orgoglio catanese."],
+TRINACRIA:["Tre gambe attorno a una testa.","Compare sulla bandiera siciliana.","Simbolo antico della Sicilia."],
+TESTA:["Quella di Moro è un'icona decorativa.","Nelle ceramiche siciliane può diventare un vaso.","Può essere 'di Moro' sui balconi."],
+RITI:["Tradizioni ripetute secondo usanze e credenze.","Cerimonie che tornano nel tempo.","Una comunità li conserva."],
+IONIO:["Il mare della costa orientale siciliana.","Bagna Catania e Acireale.","A est dell'isola trovi questo mare."],
+NINFA:["Creatura femminile delle antiche leggende.","Figura mitologica legata alla natura.","Essere mitico della tradizione classica."],
+CUNTU:["In siciliano significa racconto.","Una storia detta alla siciliana.","Parola dialettale per una narrazione."],
+IRI:["In siciliano: andare.","Tre lettere che significano andare.","Verbo dialettale di movimento."],
+TESTAFINA:["Il titolo di chi arriva in fondo usando l'intuito.","La corona enigmistica dell'ultimo livello.","Come chiamiamo il campione finale."],
+SCIARA:["Distesa di lava solidificata.","Terreno nero lasciato dalle colate.","Parola siciliana legata ai paesaggi vulcanici."],
+TAORMINA:["Perla turistica con teatro antico.","Località famosa per il teatro greco-romano.","Eleganza, mare e vista sull'Etna."],
+FARO:["Una luce che guida le navi.","Torre costiera per i naviganti.","Di notte aiuta chi è in mare."]
+};
+
+const FALLBACK_LEVELS=[
+{theme:"Etna",slug:"etna-classico-01",icon:"🌋",rows:11,cols:10,words:[
+{id:"1a",n:1,a:"ETNA",r:0,c:4,d:"h"},{id:"1b",n:2,a:"NORMA",r:0,c:6,d:"v"},{id:"1c",n:3,a:"PUPI",r:1,c:3,d:"v"},{id:"1d",n:4,a:"ACI",r:2,c:1,d:"v"},{id:"1e",n:5,a:"MARE",r:3,c:6,d:"h"},{id:"1f",n:6,a:"SICILIA",r:4,c:0,d:"h"},{id:"1g",n:7,a:"CANNOLI",r:4,c:2,d:"v"},{id:"1h",n:8,a:"LIOTRU",r:4,c:4,d:"v"},{id:"1i",n:9,a:"LAVA",r:6,c:8,d:"v"},{id:"1j",n:10,a:"TIMPA",r:7,c:4,d:"h"}]},
+{theme:"Catania",slug:"catania-classico-01",icon:"🐘",rows:10,cols:9,words:[
+{id:"2a",n:1,a:"CATANIA",r:4,c:1,d:"h"},{id:"2b",n:2,a:"CUPOLE",r:4,c:1,d:"v"},{id:"2c",n:3,a:"PLAYA",r:2,c:2,d:"v"},{id:"2d",n:4,a:"ETNEA",r:3,c:3,d:"v"},{id:"2e",n:5,a:"AGATA",r:4,c:4,d:"v"},{id:"2f",n:6,a:"NESIMA",r:4,c:5,d:"v"},{id:"2g",n:7,a:"LIOTRU",r:3,c:6,d:"v"},{id:"2h",n:8,a:"ACI",r:4,c:7,d:"v"}]},
+{theme:"Sapori",slug:"sapori-classico-01",icon:"🍋",rows:12,cols:9,words:[
+{id:"3a",n:1,a:"CAPONATA",r:4,c:0,d:"h"},{id:"3b",n:2,a:"CANNOLO",r:4,c:0,d:"v"},{id:"3c",n:3,a:"PASTA",r:4,c:2,d:"v"},{id:"3d",n:4,a:"OLIVA",r:4,c:3,d:"v"},{id:"3e",n:5,a:"NORMA",r:4,c:4,d:"v"},{id:"3f",n:6,a:"AGRUMI",r:4,c:5,d:"v"},{id:"3g",n:7,a:"TAVOLA",r:4,c:6,d:"v"},{id:"3h",n:8,a:"ARANCINO",r:2,c:7,d:"v"}]},
+{theme:"Sicilia Segreta",slug:"sicilia-segreta-classico-01",icon:"🗝️",rows:10,cols:9,words:[
+{id:"4a",n:1,a:"TRINACRIA",r:4,c:0,d:"h"},{id:"4b",n:2,a:"TESTA",r:4,c:0,d:"v"},{id:"4c",n:3,a:"RITI",r:4,c:1,d:"v"},{id:"4d",n:4,a:"IONIO",r:4,c:2,d:"v"},{id:"4e",n:5,a:"NINFA",r:4,c:3,d:"v"},{id:"4f",n:6,a:"AGATA",r:4,c:4,d:"v"},{id:"4g",n:7,a:"CUNTU",r:4,c:5,d:"v"},{id:"4h",n:8,a:"IRI",r:4,c:7,d:"v"},{id:"4i",n:9,a:"ACI",r:4,c:8,d:"v"}]},
+{theme:"Finale",slug:"testa-fina-finale-classico-01",icon:"👑",rows:12,cols:9,words:[
+{id:"5a",n:1,a:"TESTAFINA",r:4,c:0,d:"h"},{id:"5b",n:2,a:"TIMPA",r:4,c:0,d:"v"},{id:"5c",n:3,a:"ETNA",r:4,c:1,d:"v"},{id:"5d",n:4,a:"SCIARA",r:4,c:2,d:"v"},{id:"5e",n:5,a:"TAORMINA",r:4,c:3,d:"v"},{id:"5f",n:6,a:"AGATA",r:4,c:4,d:"v"},{id:"5g",n:7,a:"FARO",r:4,c:5,d:"v"},{id:"5h",n:8,a:"IONIO",r:4,c:6,d:"v"},{id:"5i",n:9,a:"NORMA",r:4,c:7,d:"v"},{id:"5j",n:10,a:"ACI",r:4,c:8,d:"v"}]}
+];
+
+/* ========= ETNA GAMES CLOUD (V46) =========
+ * Existing Miledi Beauty Club instance, separate etna_game_* tables.
+ * Read only published public puzzle/clue data. No customer/fidelity table access.
+ * No anonymous auth enabled on this shared Miledi database.
+ * Guest progress remains on this device (localStorage).
+ */
+const ETNA_API = "https://tziwxfcggudpbdfsqraq.supabase.co";
+const ETNA_PUBLIC_KEY = "sb_publishable_XzJe8YJs2X9Nsg-hbBxMnw_oJp7yKLf";
+const CATALOG_KEY = "etna_games_v46_catalog";
+const SAVE_KEY = "etna_games_v46_progress";
+let LEVELS=FALLBACK_LEVELS,REMOTE_CLUES={},catalogOnline=false;
+
+function setCloudStatus(message,offline=false){
+  const el=$("#cloudStatus");
+  el.textContent=message;
+  el.classList.toggle("offline",offline);
+}
+function tryGet(key){try{return JSON.parse(localStorage.getItem(key)||"null")}catch(_){return null}}
+function tryPut(key,value){try{localStorage.setItem(key,JSON.stringify(value))}catch(_){}}
+function normalizePuzzle(p){
+  if(!p || !Number.isInteger(p.rows)||!Number.isInteger(p.cols)||
+    p.rows<3||p.rows>24||p.cols<3||p.cols>24||!Array.isArray(p.words)||
+    p.words.length<2||p.words.length>100||!Number.isInteger(p.level_no))return null;
+  const letters=new Map();
+  const words=[];
+  for(const input of p.words){
+    if(!input||typeof input.a!=="string"||!/^[A-Z]{2,25}$/.test(input.a)||
+      !Number.isInteger(input.r)||!Number.isInteger(input.c)||
+      !["h","v"].includes(input.d)||!Number.isInteger(input.n))return null;
+    for(let i=0;i<input.a.length;i++){
+      const r=input.r+(input.d==="v"?i:0),c=input.c+(input.d==="h"?i:0);
+      if(r<0||c<0||r>=p.rows||c>=p.cols)return null;
+      const k=r+"-"+c;
+      if(letters.has(k)&&letters.get(k)!==input.a[i])return null;
+      letters.set(k,input.a[i]);
+    }
+    words.push({id:String(input.id||input.n),n:input.n,a:input.a,r:input.r,c:input.c,d:input.d});
+  }
+  return {slug:String(p.slug||""),theme:String(p.title||"Sicilia").slice(0,80),
+    icon:String(p.icon||"🌋").slice(0,8),rows:p.rows,cols:p.cols,words};
+}
+function loadParsedCatalog(payload){
+  if(!payload||!Array.isArray(payload.puzzles)||!Array.isArray(payload.clues))return false;
+  const byLevel=new Map();
+  for(const p of payload.puzzles){
+    const value=normalizePuzzle(p);
+    if(!value)continue;
+    if(!byLevel.has(p.level_no))byLevel.set(p.level_no,[]);
+    byLevel.get(p.level_no).push(value);
+  }
+  const saved=tryGet(SAVE_KEY);
+  const levels=[...byLevel.keys()].sort((a,b)=>a-b).map(n=>{
+    const editions=byLevel.get(n);
+    const old=editions.find(e=>e.slug===saved?.slug);
+    return old||editions[Math.floor(Math.random()*editions.length)];
+  });
+  if(levels.length===0)return false;
+  const bank={};
+  for(const row of payload.clues){
+    if(typeof row?.answer!=="string"||typeof row?.clue!=="string")continue;
+    if(!/^[A-Z]{2,25}$/.test(row.answer)||row.clue.length>300)continue;
+    if(!bank[row.answer])bank[row.answer]=[];
+    if(!bank[row.answer].includes(row.clue))bank[row.answer].push(row.clue);
+  }
+  LEVELS=levels;
+  REMOTE_CLUES=bank;
+  return true;
+}
+async function getCloudCatalog(){
+  const headers={apikey:ETNA_PUBLIC_KEY,Accept:"application/json"};
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),7000);
+  try{
+    const puzzleUrl=ETNA_API+"/rest/v1/etna_game_puzzles?select=slug,level_no,edition_no,title,icon,rows,cols,words&is_published=eq.true&order=level_no.asc,edition_no.asc&limit=100";
+    const clueUrl=ETNA_API+"/rest/v1/etna_game_clues?select=answer,clue&is_published=eq.true&limit=1000";
+    const responses=await Promise.all([
+      fetch(puzzleUrl,{headers,signal:controller.signal}),
+      fetch(clueUrl,{headers,signal:controller.signal})
+    ]);
+    if(responses.some(r=>!r.ok))throw new Error("HTTP "+responses.map(r=>r.status).join("/"));
+    const [puzzles,clues]=await Promise.all(responses.map(r=>r.json()));
+    const payload={puzzles,clues};
+    if(!loadParsedCatalog(payload))throw new Error("Catalogo vuoto o non valido");
+    tryPut(CATALOG_KEY,payload);
+    catalogOnline=true;
+    return true;
+  }catch(e){
+    catalogOnline=false;
+    const cached=tryGet(CATALOG_KEY);
+    if(!loadParsedCatalog(cached)){LEVELS=FALLBACK_LEVELS;REMOTE_CLUES={};}
+    console.warn("Etna Games: modalità offline",e.message);
+    return false;
+  }finally{clearTimeout(timer)}
+}
+function progressSignature(){return level?.slug||("base-livello-"+(li+1))}
+function saveProgress(){
+  if(!level)return;
+  tryPut(SAVE_KEY,{
+    slug:progressSignature(),index:li,letters:Object.fromEntries(VALS),xp,streak,maxStreak,
+    selected:[sel.r,sel.c],savedAt:new Date().toISOString()
+  });
+}
+function resumeProgress(){
+  const saved=tryGet(SAVE_KEY);
+  if(!saved||!Number.isInteger(saved.index)||saved.index<0||saved.index>=LEVELS.length)return false;
+  const target=LEVELS[saved.index];
+  const expected=target.slug||("base-livello-"+(saved.index+1));
+  if(saved.slug!==expected)return false;
+  buildLevel(saved.index);
+  if(saved.letters&&typeof saved.letters==="object"){
+    for(const [k,v] of Object.entries(saved.letters)){
+      if(/^\d{1,2}-\d{1,2}$/.test(k)&&MAP.has(k)&&/^[A-Z]$/.test(v)){
+        const [r,c]=k.split("-").map(Number);setLetter(r,c,v);
+      }
+    }
+  }
+  SOLVED=new Set(level.words.filter(correct).map(w=>w.id));
+  xp=Math.max(0,Math.min(10000,Number(saved.xp)||0));
+  streak=Math.max(0,Math.min(1000,Number(saved.streak)||0));
+  maxStreak=Math.max(0,Math.min(1000,Number(saved.maxStreak)||0));
+  const [r,c]=Array.isArray(saved.selected)?saved.selected:[];
+  if(Number.isInteger(r)&&Number.isInteger(c)&&MAP.has(key(r,c))){
+    sel={r,c};active=wordsAt(r,c)[0]||active;
+  }
+  render();
+  notice.textContent="Partita ripresa dal salvataggio sul dispositivo.";
+  return true;
+}
+
+let li=0,level=null,MAP=new Map(),STARTS=new Map(),CELLS=new Map(),VALS=new Map(),SOLVED=new Set();
+let active=null,sel={r:0,c:0},lastTap="",xp=0,streak=0,maxStreak=0,locking=false;
+
+const key=(r,c)=>r+"-"+c;
+const pos=w=>[...w.a].map((l,i)=>({r:w.r+(w.d==="v"?i:0),c:w.c+(w.d==="h"?i:0),l}));
+const wordsAt=(r,c)=>MAP.get(key(r,c))?.ws||[];
+const cellNow=()=>CELLS.get(key(sel.r,sel.c));
+
+function chooseClue(w){
+  const bank=REMOTE_CLUES[w.a]||CLUES[w.a]||[w.a];
+  let n=bank[Math.floor(Math.random()*bank.length)];
+  if(bank.length>1){
+    let guard=0;
+    while(n===w.clue&&guard++<6)n=bank[Math.floor(Math.random()*bank.length)];
+  }
+  w.clue=n;
+}
+function buildLevel(index){
+  li=index;level=LEVELS[index];
+  MAP=new Map();STARTS=new Map();CELLS=new Map();VALS=new Map();SOLVED=new Set();
+  locking=false;lastTap="";
+  grid.innerHTML="";defs.innerHTML="";notice.textContent="";notice.className="";
+  level.words.forEach(w=>{
+    chooseClue(w);
+    pos(w).forEach(p=>{
+      const k=key(p.r,p.c);
+      if(MAP.has(k)){
+        const ex=MAP.get(k);
+        if(ex.l!==p.l)console.error("Conflitto",k,ex.l,p.l);
+        ex.ws.push(w);
+      }else MAP.set(k,{l:p.l,ws:[w]});
+    });
+    const sk=key(w.r,w.c);
+    if(!STARTS.has(sk))STARTS.set(sk,[]);
+    STARTS.get(sk).push(w.n);
+  });
+  active=level.words[0];sel={r:active.r,c:active.c};
+  grid.style.gridTemplateColumns=`repeat(${level.cols},1fr)`;
+  grid.style.gridTemplateRows=`repeat(${level.rows},1fr)`;
+  grid.style.aspectRatio=`${level.cols}/${level.rows}`;
+  for(let r=0;r<level.rows;r++)for(let c=0;c<level.cols;c++){
+    if(!MAP.has(key(r,c))){
+      const b=document.createElement("div");b.className="blk";grid.appendChild(b);continue;
+    }
+    const b=document.createElement("button");b.type="button";b.className="cell";
+    if(STARTS.has(key(r,c))){
+      const n=document.createElement("span");n.className="num";n.textContent=STARTS.get(key(r,c)).join("/");b.appendChild(n);
+    }
+    const l=document.createElement("span");l.className="letter";b.appendChild(l);
+    b.onclick=()=>{
+      const k=key(r,c),same=k===lastTap;lastTap=k;sel={r,c};
+      const opts=wordsAt(r,c);
+      if(opts.length&&!opts.includes(active))active=opts.find(w=>w.d===active.d)||opts[0];
+      else if(same&&opts.length>1)active=opts.find(w=>w!==active)||active;
+      render();saveProgress();tapTone();haptic("tap",b);focusNative();
+    };
+    CELLS.set(key(r,c),b);grid.appendChild(b);
+  }
+  renderDefs();render();
+}
+function renderDefs(){
+  defs.innerHTML="";
+  level.words.forEach(w=>{
+    const b=document.createElement("button");b.type="button";
+    b.className="def"+(w===active?" active":"");
+    const number=document.createElement("b");number.textContent=w.n+". ";
+    b.append(number,document.createTextNode(w.clue));
+    b.onclick=()=>{active=w;const p=pos(w)[0];sel={r:p.r,c:p.c};render();saveProgress();focusNative()};
+    defs.appendChild(b);
+  });
+}
+function globalProgress(){
+  return Math.round(((li+(SOLVED.size/level.words.length))/LEVELS.length)*100);
+}
+function render(){
+  CELLS.forEach((c,k)=>{
+    c.classList.remove("word","sel","ok","bad");
+    const [r,col]=k.split("-").map(Number);
+    if(wordsAt(r,col).some(w=>SOLVED.has(w.id)))c.classList.add("ok");
+  });
+  pos(active).forEach(p=>CELLS.get(key(p.r,p.c))?.classList.add("word"));
+  cellNow()?.classList.add("sel");
+  $("#theme").textContent=`${level.icon} ${level.theme.toUpperCase()}`;
+  $("#level").textContent=`LIV. ${li+1}/${LEVELS.length}`;
+  $("#xp").textContent=`XP ${xp}`;
+  $("#progress").style.width=globalProgress()+"%";
+  $("#clueNo").textContent=`${active.n} ${active.d==="h"?"OR.":"VER."}`;
+  $("#clueText").textContent=active.clue;
+  $("#dirH").classList.toggle("active",active.d==="h");
+  $("#dirV").classList.toggle("active",active.d==="v");
+  $("#dirH").disabled=!wordsAt(sel.r,sel.c).some(w=>w.d==="h");
+  $("#dirV").disabled=!wordsAt(sel.r,sel.c).some(w=>w.d==="v");
+  renderDefs();
+}
+function setLetter(r,c,v){
+  const k=key(r,c);
+  v?VALS.set(k,v):VALS.delete(k);
+  const cell=CELLS.get(k);
+  if(cell){cell.querySelector(".letter").textContent=v||"";cell.classList.remove("bad")}
+}
+function correct(w){return pos(w).every(p=>VALS.get(key(p.r,p.c))===p.l)}
+function reconcile(){
+  const previous=new Set(SOLVED),current=new Set(),gained=[],lost=[];
+  level.words.forEach(w=>{
+    if(correct(w)){current.add(w.id);if(!previous.has(w.id))gained.push(w)}
+    else if(previous.has(w.id))lost.push(w);
+  });
+  SOLVED=current;
+  if(lost.length){xp=Math.max(0,xp-lost.length*40);streak=0}
+  if(gained.length){
+    xp+=gained.length*40;streak+=gained.length;maxStreak=Math.max(maxStreak,streak);
+    gained.forEach(w=>pos(w).forEach(p=>{
+      const c=CELLS.get(key(p.r,p.c));c?.classList.add("win");setTimeout(()=>c?.classList.remove("win"),500);
+    }));
+    notice.className="good";
+    notice.textContent=`✓ PAROLA CORRETTA · +${gained.length*40} XP`;
+    winTone();haptic("ok",cellNow());
+  }
+  render();
+  saveProgress();
+  if(SOLVED.size===level.words.length&&!locking){
+    locking=true;setTimeout(showLevelDone,350);
+  }
+}
+function idx(){return pos(active).findIndex(p=>p.r===sel.r&&p.c===sel.c)}
+function move(n){
+  const a=pos(active);let i=idx();if(i<0)i=0;i=Math.max(0,Math.min(a.length-1,i+n));
+  sel={r:a[i].r,c:a[i].c};render();saveProgress();
+}
+function write(ch){
+  if(!/^[A-Z]$/.test(ch))return;
+  setLetter(sel.r,sel.c,ch);typeTone();reconcile();move(1);
+}
+function erase(){
+  const k=key(sel.r,sel.c);
+  if(VALS.has(k))setLetter(sel.r,sel.c,"");
+  else{move(-1);setLetter(sel.r,sel.c,"")}
+  reconcile();tapTone();
+}
+function focusNative(){
+  try{native.focus({preventScroll:true})}catch(e){native.focus()}
+  try{native.setSelectionRange(native.value.length,native.value.length)}catch(e){}
+}
+let beforeHandled=false;
+native.addEventListener("beforeinput",e=>{
+  const type=e.inputType||"";
+  if(type==="deleteContentBackward"){
+    beforeHandled=true;e.preventDefault();erase();native.value="";
+    queueMicrotask(()=>beforeHandled=false);return;
+  }
+  if(type.startsWith("insert")){
+    const d=(e.data||"").toUpperCase().replace(/[^A-Z]/g,"");
+    if(d){
+      beforeHandled=true;e.preventDefault();[...d].forEach(write);native.value="";
+      queueMicrotask(()=>beforeHandled=false);
+    }
+  }
+});
+native.addEventListener("input",e=>{
+  if(beforeHandled){e.target.value="";return}
+  const d=e.target.value.toUpperCase().replace(/[^A-Z]/g,"");
+  [...d].forEach(write);e.target.value="";
+});
+native.addEventListener("keydown",e=>{
+  if(e.key==="Backspace" && !("onbeforeinput" in native)){
+    e.preventDefault();erase();native.value="";
+  }
+});
+$("#back").onclick=erase;
+$("#keyboard").onclick=focusNative;
+$("#dirH").onclick=()=>{
+  const w=wordsAt(sel.r,sel.c).find(w=>w.d==="h");
+  if(w){active=w;render();focusNative()}
+};
+$("#dirV").onclick=()=>{
+  const w=wordsAt(sel.r,sel.c).find(w=>w.d==="v");
+  if(w){active=w;render();focusNative()}
+};
+$("#shuffle").onclick=()=>{
+  chooseClue(active);render();
+  notice.className="";
+  notice.textContent="🎲 Nuovo indizio per questa parola.";
+  tone(900,.06,.005);setTimeout(()=>tone(1100,.06,.004),50);
+};
+$("#hint").onclick=()=>{
+  const p=pos(active).find(p=>VALS.get(key(p.r,p.c))!==p.l);
+  if(!p){notice.className="good";notice.textContent="Questa parola è già corretta.";return}
+  setLetter(p.r,p.c,p.l);sel={r:p.r,c:p.c};tone(900,.06,.005);reconcile();
+};
+$("#check").onclick=()=>{
+  let ok=0;
+  CELLS.forEach((c,k)=>{
+    const v=VALS.get(k)||"",exp=MAP.get(k).l;
+    c.classList.remove("bad");
+    if(v===exp)ok++;
+    else if(v)c.classList.add("bad");
+  });
+  if(ok===MAP.size)reconcile();
+  else{
+    streak=0;notice.className="bad";
+    notice.textContent=`${ok} caselle corrette su ${MAP.size}. Le rosse sono da rivedere.`;
+    saveProgress();errorTone();haptic("bad",grid);
+  }
+};
+
+function showLevelDone(){
+  $("#dXp").textContent=xp;
+  $("#dWords").textContent=`${SOLVED.size}/${level.words.length}`;
+  $("#dStreak").textContent=maxStreak;
+  if(li<LEVELS.length-1){
+    $("#dialogTitle").textContent=`${level.theme} completato`;
+    $("#dialogText").textContent=`Prossimo livello: ${LEVELS[li+1].theme}.`;
+    $("#next").textContent="LIVELLO SUCCESSIVO →";
+  }else{
+    $("#dialogTitle").textContent="Testa fina dell'Etna";
+    $("#dialogText").textContent="Hai completato tutti i 5 livelli.";
+    $("#next").textContent="RICOMINCIA →";
+  }
+  $("#levelDialog").showModal();
+  winTone();
+}
+$("#closeDialog").onclick=()=>$("#levelDialog").close();
+$("#next").onclick=()=>{
+  $("#levelDialog").close();
+  if(li<LEVELS.length-1)buildLevel(li+1);
+  else{xp=0;streak=0;maxStreak=0;buildLevel(0)}
+  saveProgress();
+};
+
+$("#start").onclick=async()=>{
+  ac();
+  const button=$("#start");button.disabled=true;button.textContent="CARICAMENTO CRUCIVERBA…";
+  const online=await getCloudCatalog();
+  if(!resumeProgress()){
+    xp=0;streak=0;maxStreak=0;buildLevel(0);saveProgress();
+  }
+  setCloudStatus(online
+    ?"● SUPABASE CONNESSO · INDIZI DAL DATABASE · SALVATAGGIO SUL DISPOSITIVO"
+    :"◌ OFFLINE · CRUCIVERBA INCLUSI · SALVATAGGIO SUL DISPOSITIVO",!online);
+  button.disabled=false;button.textContent="INIZIA IL CRUCIVERBA →";
+  show("game");
+  if(SOLVED.size===level.words.length&&!locking){
+    locking=true;setTimeout(showLevelDone,380);
+  }
+};
+syncToggles();
+})();
+</script>
+</body>
+</html>
